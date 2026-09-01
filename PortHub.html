@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PortHub – Plataforma de Projetos de Mecatrônica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: #1a2a3a;
+            color: #fff;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: #00bcd4;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .btn-novo-projeto {
+            background: #00bcd4;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-novo-projeto:hover {
+            background: #0097a7;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #1a2a3a, #2c3e50);
+            color: #fff;
+            text-align: center;
+            padding: 70px 20px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #00bcd4;
+            color: #fff;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Seção Projetos */
+        .projetos {
+            padding: 60px 5%;
+            text-align: center;
+        }
+
+        .projetos h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: #1a2a3a;
+        }
+
+        .projetos > p {
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        /* Filtros */
+        .filtros {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .filtro-btn {
+            background: #fff;
+            border: 2px solid #ddd;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filtro-btn:hover, .filtro-btn.ativo {
+            background: #00bcd4;
+            color: #fff;
+            border-color: #00bcd4;
+        }
+
+        /* Grid de projetos */
+        .grid-projetos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .card-img {
+            height: 180px;
+            background: linear-gradient(45deg, #00bcd4, #1a2a3a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .card-img .verificado {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #00bcd4;
+            color: #fff;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .card-body {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-body h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .card-body p {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            flex: 1;
+        }
+
+        .tags {
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #e0f2f1;
+            color: #00796b;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 6px;
+            margin-bottom: 6px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+
+        .autor {
+            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .autor .verificado {
+            color: #00bcd4;
+            font-size: 0.85rem;
+        }
+
+        .btn-detalhes {
+            background: transparent;
+            border: 2px solid #00bcd4;
+            color: #00bcd4;
+            padding: 6px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-detalhes:hover {
+            background: #00bcd4;
+            color: #fff;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 15px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .modal-fechar {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #888;
+            background: none;
+            border: none;
+            transition: color 0.3s;
+            z-index: 10;
+        }
+
+        .modal-fechar:hover {
+            color: #333;
+        }
+
+        .modal-conteudo {
+            padding: 30px;
+        }
+
+        /* Tabs do modal */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            color: #888;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: #00bcd4;
+            border-bottom-color: #00bcd4;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Visão geral */
+        .modal-imagem {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, #00bcd4, #1a2a3a);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 4rem;
+        }
+
+        .modal-titulo {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            color: #1a2a3a;
+        }
+
+        .modal-autor {
+            font-size: 0.95rem;
+            color: #888;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .verificado-badge {
+            background: #00bcd4;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .modal-descricao {
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .modal-acoes {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn-acao {
+            background: #f0f4f8;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .btn-acao:hover {
+            background: #e0e8ef;
+            transform: translateY(-2px);
+        }
+
+        .btn-acao.salvo {
+            background: #ffeb3b;
+            color: #333;
+        }
+
+        .btn-github {
+            background: #1a2a3a;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .btn-github:hover {
+            background: #2c3e50;
+        }
+
+        /* Tabela de versões */
+        .tabela-versoes {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .tabela-versoes th, .tabela-versoes td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .tabela-versoes th {
+            background: #f4f7f9;
+            font-weight: 600;
+        }
+
+        .tabela-versoes tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        /* Galeria de mídia */
+        .galeria {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .galeria-item {
+            border-radius: 8px;
+            overflow: hidden;
+            background: #f4f7f9;
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            border: 2px solid #eee;
+        }
+
+        .galeria-item img, .galeria-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Fórum de Troubleshooting */
+        .forum {
+            margin-top: 20px;
+        }
+
+        .topicos {
+            margin-bottom: 20px;
+        }
+
+        .topico-item {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+        }
+
+        .topico-titulo {
+            font-weight: bold;
+            color: #1a2a3a;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .topico-autor {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .respostas {
+            margin-top: 10px;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+
+        .resposta {
+            background: #fff;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .resposta-autor {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 2px;
+        }
+
+        .resposta-texto {
+            font-size: 0.9rem;
+        }
+
+        .novo-topico {
+            background: #f0f4f8;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .novo-topico h5 {
+            margin-bottom: 15px;
+        }
+
+        .novo-topico input, .novo-topico textarea {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .novo-topico button {
+            background: #00bcd4;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Formulário de upload (modal novo projeto) */
+        .form-upload {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #1a2a3a;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #00bcd4;
+            outline: none;
+        }
+
+        .form-group .required::after {
+            content: " *";
+            color: red;
+        }
+
+        .file-upload {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: #00bcd4;
+            background: #f0fafc;
+        }
+
+        .btn-submit {
+            background: #00bcd4;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background: #0097a7;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .modal-conteudo {
+                padding: 20px;
+            }
+            .tabs {
+                flex-wrap: wrap;
+            }
+            .tab-btn {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">Port<span>Hub</span></div>
+        <nav>
+            <ul>
+                <li><a href="#projetos">Projetos</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+        </nav>
+        <button class="btn-novo-projeto" onclick="abrirModalNovoProjeto()">+ Novo Projeto</button>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>Compartilhe e descubra projetos de mecatrônica</h1>
+        <p>Uma plataforma aberta para estudantes, engenheiros e makers divulgarem seus projetos, códigos e documentações.</p>
+        <a href="#projetos" class="btn">Explorar projetos</a>
+    </section>
+
+    <!-- Seção de Projetos -->
+    <section id="projetos" class="projetos">
+        <h2>Projetos em destaque</h2>
+        <p>Filtre por categoria ou clique em "Ver projeto" para mais detalhes.</p>
+
+        <div class="filtros">
+            <button class="filtro-btn ativo" data-categoria="todos">Todos</button>
+            <button class="filtro-btn" data-categoria="robotica">Robótica</button>
+            <button class="filtro-btn" data-categoria="automacao">Automação</button>
+            <button class="filtro-btn" data-categoria="eletronica">Eletrônica</button>
+        </div>
+
+        <div class="grid-projetos" id="grid-projetos">
+            <!-- Cards gerados via JS -->
+        </div>
+    </section>
+
+    <!-- Sobre -->
+    <section id="sobre" class="sobre" style="background: #fff; padding: 60px 5%; text-align: center;">
+        <h2>Por que a PortHub?</h2>
+        <p>O desenvolvimento de projetos em mecatrônica envolve a convergência de múltiplas engenharias, como a mecânica, a eletrônica e a computação. Quando hobbistas, estudantes e engenheiros tentam compartilhar seus protótipos e invenções na internet, eles normalmente deparam-se com um ecossistema altamente fragmentado, onde repositórios genéricos de código falham em abrigar projetos físicos e fóruns espalhados tornam o suporte caótico. Dentre os principais obstáculos que desestimulam essa inovação colaborativa na área, destacam-se a falta de padronização na documentação, que muitas vezes omite listas de materiais incompletas ou esquemáticos ilegíveis; a incompatibilidade de versões e dependências em softwares embarcados que quebram com atualizações; o isolamento físico e mecânico que dificulta transmitir tolerâncias de impressão 3D e ajustes de torque apenas com textos; e a fragmentação de suporte, onde as dúvidas ficam perdidas em comentários desorganizados sem um histórico estruturado de solução de problemas.
+
+Para mitigar essas barreiras e transformar a forma como a comunidade mecatrônica compartilha conhecimento, surge a PortHub, uma plataforma desenvolvida sob os pilares da simplicidade, intuição e funcionalidade. A proposta da PortHub é criar um ambiente centralizado onde hardware, software e documentação mecânica andam lado a lado, fazendo com que o criador não perca tempo formatando documentos do zero e o replicador encontre tudo o que precisa em poucos cliques. Isso é alcançado através de um sistema de upload guiado que padroniza o preenchimento de componentes e arquivos CAD, de uma gestão inteligente de versões que vincula o firmware às bibliotecas compatíveis para garantir que o código compile sem dores de cabeça, do suporte a mídias ricas integradas para ilustrar o comportamento real do protótipo com vídeos e GIFs, e de uma seção de troubleshooting dedicada que cataloga dúvidas e conecta criadores e replicadores de forma eficiente. Desse modo, a PortHub traduz a essência da engenharia multidisciplinar para o meio digital, impulsionando o desenvolvimento de projetos mecatrônicos mais seguros, reprodutíveis e colaborativos.</p>
+        <p>Se você tem um projeto, junte-se à comunidade e ajude outros entusiastas!</p>
+    </section>
+
+    <!-- Contato -->
+    <section id="contato" class="contato" style="padding: 60px 5%; background: #f4f7f9; text-align: center;">
+        <h2>Entre em contato</h2>
+        <p>Quer enviar seu projeto ou tirar dúvidas? Preencha o formulário abaixo.</p>
+        <form action="#" method="post" style="max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+            <input type="text" placeholder="Seu nome" required style="padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem;">
+            <input type="email" placeholder="Seu e-mail" required style="padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem;">
+            <textarea rows="5" placeholder="Mensagem ou descrição do projeto" required style="padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem;"></textarea>
+            <button type="submit" style="background: #00bcd4; color: #fff; border: none; padding: 12px; border-radius: 8px; font-size: 1rem; cursor: pointer;">Enviar</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: #1a2a3a; color: #bbb; text-align: center; padding: 30px 5%; font-size: 0.9rem;">
+        <p>&copy; 2026 PortHub | <a href="#" style="color: #00bcd4;">Termos</a> | <a href="#" style="color: #00bcd4;">Privacidade</a></p>
+    </footer>
+
+    <!-- Modal de projeto (detalhes) -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <button class="modal-fechar" id="modal-fechar">&times;</button>
+            <div class="modal-conteudo" id="modal-conteudo">
+                <!-- Conteúdo preenchido via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de novo projeto -->
+    <div class="modal-overlay" id="modal-novo-projeto">
+        <div class="modal">
+            <button class="modal-fechar" onclick="fecharModalNovoProjeto()">&times;</button>
+            <div class="modal-conteudo">
+                <h2 style="color:#1a2a3a; margin-bottom: 20px;">Enviar Novo Projeto</h2>
+                <form id="form-novo-projeto" class="form-upload" onsubmit="enviarNovoProjeto(event)">
+                    <div class="form-group">
+                        <label class="required">Título do Projeto</label>
+                        <input type="text" id="novo-titulo" required placeholder="Ex: Braço Robótico de 6 Eixos">
+                    </div>
+                    <div class="form-group">
+                        <label class="required">Descrição</label>
+                        <textarea id="novo-descricao" required rows="4" placeholder="Descreva o projeto, seu funcionamento e objetivos"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="required">Categoria</label>
+                        <select id="novo-categoria" required>
+                            <option value="">Selecione...</option>
+                            <option value="robotica">Robótica</option>
+                            <option value="automacao">Automação</option>
+                            <option value="eletronica">Eletrônica</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="required">Autor</label>
+                        <input type="text" id="novo-autor" required placeholder="Seu nome">
+                    </div>
+                    <div class="form-group">
+                        <label>Esquemático (PDF, PNG, SVG)</label>
+                        <div class="file-upload" onclick="document.getElementById('upload-esquematico').click()">
+                            <p>Clique para selecionar ou arraste o arquivo</p>
+                            <input type="file" id="upload-esquematico" accept=".pdf,.png,.svg" style="display:none;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Código (ZIP, link para GitHub)</label>
+                        <input type="url" id="novo-codigo" placeholder="Link do repositório (ex: https://github.com/...)" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="required">Lista de Componentes com links</label>
+                        <textarea id="novo-componentes" required rows="3" placeholder="Ex: 1x Arduino Uno - https://...; 2x Servo - https://..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Arquivos CAD/Impressão 3D</label>
+                        <input type="url" id="novo-cad" placeholder="Link para arquivos .stl, .step ou similar">
+                    </div>
+                    <div class="form-group">
+                        <label>Licença</label>
+                        <select id="novo-licenca">
+                            <option value="MIT">MIT</option>
+                            <option value="CC-BY">Creative Commons BY</option>
+                            <option value="GPL">GPL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Mídia rica (URLs de imagens, GIFs, vídeos)</label>
+                        <input type="text" id="novo-midias" placeholder="Cole URLs separadas por vírgula (ex: https://imgur.com/... , https://youtube.com/...)">
+                    </div>
+                    <button type="submit" class="btn-submit">Publicar Projeto</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados dos projetos (adicionando novos campos: versoes, midias, forum, licenca, verificado)
+        const projetos = [
+            {
+                id: 1,
+                titulo: 'Braço Robótico de 6 Eixos',
+                descricao: 'Braço robótico com controle inverso de cinemática, impresso em 3D e controlado por Arduino. Possui 6 graus de liberdade e é ideal para estudos de robótica.',
+                categoria: 'robotica',
+                tags: ['Arduino', 'ROS', 'Impressão 3D'],
+                autor: 'Ana Souza',
+                verificado: true,
+                emoji: '🤖',
+                link: 'https://github.com/exemplo/braco-robotico',
+                licenca: 'MIT',
+                versoes: [
+                    { versao: 'v1.0', bibliotecas: 'ArduinoJson 6.19', data: '2024-01-15' },
+                    { versao: 'v1.1', bibliotecas: 'ArduinoJson 6.21, Rosserial 0.9', data: '2024-05-10' }
+                ],
+                midias: [
+                    'https://placehold.co/300x200?text=Diagrama',
+                    'https://placehold.co/300x200?text=GIF+Funcionamento'
+                ],
+                forum: [
+                    {
+                        pergunta: 'Como calibrar os servos?',
+                        autor: 'Carlos',
+                        respostas: [
+                            { autor: 'Ana', texto: 'Use a função de calibração no código, ajuste o valor mínimo e máximo no setup.' }
+                        ]
+                    }
+                ],
+                comentarios: [
+                    { nome: 'Carlos', texto: 'Excelente projeto! Usei como base para meu TCC.' },
+                    { nome: 'Julia', texto: 'As instruções são bem claras, parabéns!' }
+                ]
+            },
+            {
+                id: 2,
+                titulo: 'Esteira de Separação Automatizada',
+                descricao: 'Esteira com sensores de cor e altura para classificação de peças, utilizando CLP. Projeto voltado para automação industrial e processos logísticos.',
+                categoria: 'automacao',
+                tags: ['CLP', 'Sensores', 'Automação'],
+                autor: 'Carlos Lima',
+                verificado: true,
+                emoji: '🔧',
+                link: 'https://github.com/exemplo/esteira-separacao',
+                licenca: 'CC-BY',
+                versoes: [
+                    { versao: 'v2.0', bibliotecas: 'Twincat 3.1', data: '2024-03-20' }
+                ],
+                midias: [
+                    'https://placehold.co/300x200?text=Foto+Esteira',
+                    'https://placehold.co/300x200?text=Video+Funcionamento'
+                ],
+                forum: [
+                    {
+                        pergunta: 'Como conectar o sensor de cor?',
+                        autor: 'Pedro',
+                        respostas: [
+                            { autor: 'Carlos', texto: 'Conecte na entrada I0.2 e configure o endereço no código conforme o manual.' }
+                        ]
+                    }
+                ],
+                comentarios: [
+                    { nome: 'Pedro', texto: 'Muito bom, funcionou perfeitamente no simulador.' }
+                ]
+            },
+            {
+                id: 3,
+                titulo: 'Prótese de Mão Mioelétrica',
+                descricao: 'Prótese com sensores EMG, servomotores e impressão 3D, controlada por sinais musculares. Foco em acessibilidade e reabilitação.',
+                categoria: 'robotica',
+                tags: ['EMG', 'Impressão 3D', 'Bioengenharia'],
+                autor: 'Mariana Costa',
+                verificado: false,
+                emoji: '🦾',
+                link: 'https://github.com/exemplo/protese-mao',
+                licenca: 'MIT',
+                versoes: [
+                    { versao: 'v0.9', bibliotecas: 'MyoWare', data: '2024-02-01' }
+                ],
+                midias: [
+                    'https://placehold.co/300x200?text=Imagem+Prótese',
+                    'https://placehold.co/300x200?text=Diagrama+EMG'
+                ],
+                forum: [
+                    {
+                        pergunta: 'Qual filamento você usou?',
+                        autor: 'Lucas',
+                        respostas: [
+                            { autor: 'Mariana', texto: 'Usei PLA+, mas recomendo PETG para maior resistência.' }
+                        ]
+                    }
+                ],
+                comentarios: [
+                    { nome: 'Lucas', texto: 'Projeto incrível, inspirador!' },
+                    { nome: 'Fernanda', texto: 'Vocês disponibilizam os arquivos STL?' }
+                ]
+            },
+            {
+                id: 4,
+                titulo: 'Veículo Autônomo com Visão Computacional',
+                descricao: 'Carro autônomo com câmera Raspberry Pi, OpenCV e motorização simplificada. Projeto para estudos de visão computacional e controle.',
+                categoria: 'robotica',
+                tags: ['Raspberry Pi', 'OpenCV', 'Python'],
+                autor: 'Pedro Santos',
+                verificado: true,
+                emoji: '🔩',
+                link: 'https://github.com/exemplo/veiculo-autonomo',
+                licenca: 'GPL',
+                versoes: [
+                    { versao: 'v1.0', bibliotecas: 'OpenCV 4.8', data: '2024-06-01' }
+                ],
+                midias: [
+                    'https://placehold.co/300x200?text=Carro+Em+Ação',
+                    'https://placehold.co/300x200?text=Logica+Visao'
+                ],
+                forum: [
+                    {
+                        pergunta: 'Como treinar o modelo de detecção?',
+                        autor: 'Ana',
+                        respostas: [
+                            { autor: 'Pedro', texto: 'Use o dataset fornecido no repositório e siga as instruções do README.' }
+                        ]
+                    }
+                ],
+                comentarios: [
+                    { nome: 'Ana', texto: 'Consegui rodar o código, obrigada por compartilhar!' }
+                ]
+            },
+            {
+                id: 5,
+                titulo: 'Drone de Inspeção',
+                descricao: 'Drone com câmera e estabilização para inspeção de estruturas, usando controlador de voo aberto e algoritmo PID.',
+                categoria: 'eletronica',
+                tags: ['Drone', 'PID', 'Estabilização'],
+                autor: 'Luciana Alves',
+                verificado: true,
+                emoji: '⚙️',
+                link: 'https://github.com/exemplo/drone-inspecao',
+                licenca: 'MIT',
+                versoes: [
+                    { versao: 'v1.2', bibliotecas: 'Arduino PID 1.2', data: '2024-04-15' }
+                ],
+                midias: [
+                    'https://placehold.co/300x200?text=Drone+Foto',
+                    'https://placehold.co/300x200?text=Video+Voo'
+                ],
+                forum: [
+                    {
+                        pergunta: 'Qual controlador de voo?',
+                        autor: 'Rafael',
+                        respostas: [
+                            { autor: 'Luciana', texto: 'Uso o Pixhawk 2.4.8.' }
+                        ]
+                    }
+                ],
+                comentarios: []
+            },
+            {
+                id: 6,
+                titulo: 'Sistema de Levitação Magnética',
+                descricao: 'Plataforma de levitação magnética com controle de corrente e sensores Hall. Projeto de eletromagnetismo e controle.',
+                categoria: 'eletronica',
+                tags: ['Eletromagnetismo', 'Controle', 'Sensores'],
+                autor: 'Rafaela Mota',
+                verificado: false,
+                emoji: '🧲',
+                link: 'https://github.com/exemplo/levitacao-magnetica',
+                licenca: 'CC-BY',
+                versoes: [
+                    { versao: 'v1.0', bibliotecas: 'PID_v1', data: '2024-07-01' }
+                ],
+                midias: [
+                    'https://placehold.co/300x200?text=Sistema+Levita',
+                    'https://placehold.co/300x200?text=Circuito'
+                ],
+                forum: [
+                    {
+                        pergunta: 'Posso usar outro sensor Hall?',
+                        autor: 'João',
+                        respostas: [
+                            { autor: 'Rafaela', texto: 'Sim, desde que seja linear, como o SS49E.' }
+                        ]
+                    }
+                ],
+                comentarios: [
+                    { nome: 'João', texto: 'Ficou muito legal, vou tentar reproduzir.' }
+                ]
+            }
+        ];
+
+        // Variáveis de controle
+        let proximoId = 7;
+        const salvos = new Set();
+        const grid = document.getElementById('grid-projetos');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalConteudo = document.getElementById('modal-conteudo');
+        const modalFechar = document.getElementById('modal-fechar');
+        const modalNovoProjeto = document.getElementById('modal-novo-projeto');
+
+        // Renderizar cards
+        function renderizarCards(categoria = 'todos') {
+            grid.innerHTML = '';
+            const filtrados = projetos.filter(p => categoria === 'todos' || p.categoria === categoria);
+            filtrados.forEach(projeto => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.innerHTML = `
+                    <div class="card-img">${projeto.emoji}
+                        ${projeto.verificado ? '<span class="verificado">✓</span>' : ''}
+                    </div>
+                    <div class="card-body">
+                        <h3>${projeto.titulo}</h3>
+                        <p>${projeto.descricao.substring(0, 80)}...</p>
+                        <div class="tags">
+                            ${projeto.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                        </div>
+                        <div class="card-footer">
+                            <span class="autor">${projeto.autor} ${projeto.verificado ? '<span class="verificado">✓</span>' : ''}</span>
+                            <button class="btn-detalhes" onclick="abrirModal(${projeto.id})">Ver projeto</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Abrir modal de projeto
+        function abrirModal(id) {
+            const projeto = projetos.find(p => p.id === id);
+            if (!projeto) return;
+
+            const salvo = salvos.has(projeto.id);
+            modalConteudo.innerHTML = `
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="trocarTab(this, 'geral')">Visão Geral</button>
+                    <button class="tab-btn" onclick="trocarTab(this, 'versoes')">Versões</button>
+                    <button class="tab-btn" onclick="trocarTab(this, 'midias')">Mídia</button>
+                    <button class="tab-btn" onclick="trocarTab(this, 'forum')">Suporte</button>
+                </div>
+
+                <div id="tab-geral" class="tab-content active">
+                    <div class="modal-imagem">${projeto.emoji}</div>
+                    <h2 class="modal-titulo">${projeto.titulo}</h2>
+                    <p class="modal-autor">Criado por ${projeto.autor} ${projeto.verificado ? '<span class="verificado-badge">VERIFICADO</span>' : ''}</p>
+                    <p class="modal-descricao">${projeto.descricao}</p>
+                    <div class="tags">
+                        ${projeto.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    <p><strong>Licença:</strong> <span style="background:#e0f2f1; padding:2px 10px; border-radius:20px; font-size:0.9rem;">${projeto.licenca}</span></p>
+                    <div class="modal-acoes">
+                        <a href="${projeto.link}" target="_blank" class="btn-github">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38C13.71 14.53 16 11.54 16 8c0-4.42-3.58-8-8-8z"/></svg>
+                            Ver no GitHub
+                        </a>
+                        <button class="btn-acao ${salvo ? 'salvo' : ''}" id="btn-salvar" onclick="salvarProjeto(${projeto.id})">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h4V3a2 2 0 0 1 2-2z"/></svg>
+                            <span>${salvo ? 'Salvo' : 'Salvar'}</span>
+                        </button>
+                        <button class="btn-acao" onclick="compartilharProjeto('${projeto.titulo}')">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.5 11a2.5 2.5 0 0 0-2.5 2.5v.3l-5.2-3.1a2.5 2.5 0 0 0 0-1.4L11 6.2v.3a2.5 2.5 0 1 0 2.5-2.5c-.57 0-1.09.19-1.5.5L6.8 7.6a2.5 2.5 0 1 0 0 2.8l5.2 3.1a2.5 2.5 0 1 0 1.5-.5z"/></svg>
+                            Compartilhar
+                        </button>
+                    </div>
+                    <!-- Comentários -->
+                    <div class="comentarios">
+                        <h4>Comentários (${projeto.comentarios.length})</h4>
+                        <div id="lista-comentarios">
+                            ${projeto.comentarios.map((c, i) => `
+                                <div class="comentario-item">
+                                    <div class="comentario-avatar">${c.nome.charAt(0).toUpperCase()}</div>
+                                    <div class="comentario-corpo">
+                                        <div class="comentario-nome">${c.nome}</div>
+                                        <div class="comentario-texto">${c.texto}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="comentario-input">
+                            <input type="text" id="novo-comentario" placeholder="Escreva um comentário...">
+                            <button onclick="adicionarComentario(${projeto.id})">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-versoes" class="tab-content">
+                    <h4 style="margin-bottom:15px;">Versões e Dependências</h4>
+                    <table class="tabela-versoes">
+                        <thead>
+                            <tr>
+                                <th>Versão</th>
+                                <th>Bibliotecas / Dependências</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${projeto.versoes.map(v => `
+                                <tr>
+                                    <td>${v.versao}</td>
+                                    <td>${v.bibliotecas}</td>
+                                    <td>${v.data}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    <p style="color:#888; font-size:0.9rem;">Sempre verifique a compatibilidade das bibliotecas antes de baixar.</p>
+                </div>
+
+                <div id="tab-midias" class="tab-content">
+                    <h4 style="margin-bottom:15px;">Mídia do Projeto</h4>
+                    <div class="galeria">
+                        ${projeto.midias.map((m, i) => `
+                            <div class="galeria-item">
+                                <img src="${m}" alt="Mídia ${i+1}" onerror="this.style.display='none'; this.parentNode.innerText='🎬'">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <p style="color:#888; font-size:0.9rem;">Clique nas imagens para ampliar (em versão futura).</p>
+                </div>
+
+                <div id="tab-forum" class="tab-content">
+                    <h4 style="margin-bottom:15px;">Troubleshooting / Fórum</h4>
+                    <div class="forum">
+                        <div class="topicos">
+                            ${projeto.forum.length ? projeto.forum.map(t => `
+                                <div class="topico-item">
+                                    <div class="topico-titulo">
+                                        <span>${t.pergunta}</span>
+                                        <span style="font-size:0.8rem; color:#888;">${t.respostas.length} respostas</span>
+                                    </div>
+                                    <div class="topico-autor">por ${t.autor}</div>
+                                    <div class="respostas">
+                                        ${t.respostas.map(r => `
+                                            <div class="resposta">
+                                                <div class="resposta-autor">${r.autor}</div>
+                                                <div class="resposta-texto">${r.texto}</div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('') : '<p style="color:#888;">Nenhuma dúvida ainda. Seja o primeiro a perguntar!</p>'}
+                        </div>
+                        <div class="novo-topico">
+                            <h5>Fazer uma pergunta</h5>
+                            <input type="text" id="nova-pergunta" placeholder="Sua pergunta...">
+                            <button onclick="adicionarPergunta(${projeto.id})">Postar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modalOverlay.style.display = 'flex';
+        }
+
+        // Trocar abas
+        function trocarTab(btn, tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-' + tabId).classList.add('active');
+        }
+
+        // Fechar modal
+        function fecharModal() {
+            modalOverlay.style.display = 'none';
+        }
+
+        modalFechar.addEventListener('click', fecharModal);
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) fecharModal();
+        });
+
+        // Salvar projeto
+        function salvarProjeto(id) {
+            if (salvos.has(id)) {
+                salvos.delete(id);
+                document.getElementById('btn-salvar').classList.remove('salvo');
+                document.getElementById('btn-salvar').querySelector('span').textContent = 'Salvar';
+                alert('Projeto removido dos salvos.');
+            } else {
+                salvos.add(id);
+                document.getElementById('btn-salvar').classList.add('salvo');
+                document.getElementById('btn-salvar').querySelector('span').textContent = 'Salvo';
+                alert('Projeto salvo!');
+            }
+        }
+
+        // Compartilhar
+        function compartilharProjeto(titulo) {
+            navigator.clipboard.writeText(window.location.href + '#' + titulo).then(() => {
+                alert('Link copiado! Compartilhe com a comunidade.');
+            }).catch(() => {
+                alert('Não foi possível copiar o link automaticamente.');
+            });
+        }
+
+        // Adicionar comentário
+        function adicionarComentario(id) {
+            const input = document.getElementById('novo-comentario');
+            const texto = input.value.trim();
+            if (texto === '') return;
+
+            const projeto = projetos.find(p => p.id === id);
+            projeto.comentarios.push({ nome: 'Você', texto: texto });
+
+            const lista = document.getElementById('lista-comentarios');
+            const novoComentario = document.createElement('div');
+            novoComentario.classList.add('comentario-item');
+            novoComentario.innerHTML = `
+                <div class="comentario-avatar">V</div>
+                <div class="comentario-corpo">
+                    <div class="comentario-nome">Você</div>
+                    <div class="comentario-texto">${texto}</div>
+                </div>
+            `;
+            lista.appendChild(novoComentario);
+
+            document.querySelector('.comentarios h4').textContent = `Comentários (${projeto.comentarios.length})`;
+            input.value = '';
+        }
+
+        // Adicionar pergunta no fórum
+        function adicionarPergunta(id) {
+            const input = document.getElementById('nova-pergunta');
+            const pergunta = input.value.trim();
+            if (!pergunta) return;
+
+            const projeto = projetos.find(p => p.id === id);
+            projeto.forum.push({
+                pergunta: pergunta,
+                autor: 'Você',
+                respostas: []
+            });
+
+            // Atualizar DOM removendo e recriando a lista de tópicos (simples)
+            const forum = document.querySelector('.forum .topicos');
+            forum.innerHTML = projeto.forum.map(t => `
+                <div class="topico-item">
+                    <div class="topico-titulo">
+                        <span>${t.pergunta}</span>
+                        <span style="font-size:0.8rem; color:#888;">${t.respostas.length} respostas</span>
+                    </div>
+                    <div class="topico-autor">por ${t.autor}</div>
+                    <div class="respostas">
+                        ${t.respostas.map(r => `
+                            <div class="resposta">
+                                <div class="resposta-autor">${r.autor}</div>
+                                <div class="resposta-texto">${r.texto}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+            input.value = '';
+        }
+
+        // Filtros
+        const filtros = document.querySelectorAll('.filtro-btn');
+        filtros.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filtros.forEach(b => b.classList.remove('ativo'));
+                btn.classList.add('ativo');
+                renderizarCards(btn.dataset.categoria);
+            });
+        });
+
+        // Modal Novo Projeto
+        function abrirModalNovoProjeto() {
+            modalNovoProjeto.style.display = 'flex';
+        }
+
+        function fecharModalNovoProjeto() {
+            modalNovoProjeto.style.display = 'none';
+        }
+
+        // Enviar novo projeto (simulação)
+        function enviarNovoProjeto(event) {
+            event.preventDefault();
+            const titulo = document.getElementById('novo-titulo').value.trim();
+            const descricao = document.getElementById('novo-descricao').value.trim();
+            const categoria = document.getElementById('novo-categoria').value;
+            const autor = document.getElementById('novo-autor').value.trim();
+            const link = document.getElementById('novo-codigo').value.trim();
+            const licenca = document.getElementById('novo-licenca').value;
+            const midiasInput = document.getElementById('novo-midias').value.trim();
+            const componentes = document.getElementById('novo-componentes').value.trim();
+
+            if (!titulo || !descricao || !categoria || !autor || !link || !componentes) {
+                alert('Preencha os campos obrigatórios!');
+                return;
+            }
+
+            // Criar novo projeto
+            const novoProjeto = {
+                id: proximoId++,
+                titulo,
+                descricao,
+                categoria,
+                tags: ['Novo'],
+                autor,
+                verificado: false, // será verificado depois
+                emoji: '🚀',
+                link,
+                licenca,
+                versoes: [
+                    { versao: 'v1.0', bibliotecas: 'Pendente', data: new Date().toISOString().split('T')[0] }
+                ],
+                midias: midiasInput.split(',').map(m => m.trim()).filter(m => m !== ''),
+                forum: [],
+                comentarios: [],
+                // Campos extras
+                esquematico: null, // pode ser link ou arquivo
+                componentes: componentes.split('\n') // simulação
+            };
+
+            projetos.push(novoProjeto);
+            renderizarCards();
+            fecharModalNovoProjeto();
+            alert('Projeto publicado com sucesso!');
+            document.getElementById('form-novo-projeto').reset();
+        }
+
+        // Scroll suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Inicializar
+        renderizarCards();
+    </script>
+</body>
+</html>
