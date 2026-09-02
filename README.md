@@ -1,40 +1,22 @@
 
 
-# 🤖 Projeto de Mecatrônica — Aplicações em Robótica
+# 🤖 Projeto de Mecatrônica — PortHub
 
 ---
 
 | 📋 **Informações Gerais** | 📍 **Detalhes** |
 | :--- | :--- |
-| **Curso** | Mecatrônica |
-| **Tema** | Robótica em Ambiente de Mecatrônica |
+| **Curso** | Mecatrônica 2 |
+| **Tema** | Site para fazer upload de projetos de mecatrônica com comunidade ativa |
 | **Local / Laboratório** | Sala 104 |
 
 ### 👥 Integrantes da Equipe
-- **nome do integrante**
-- **nome do integrante**
+- **Luiz Fernando Santos de Souza**
+- **Caio Vianna Martins de Souza**
+- **Maria Eduarda Carvalho Bastos Sousa**
+- **Gabriel Bernardo Reis**
 - **Mizael Souto**
 
----
-<div align="center">
-
-# 🤖 PortHub
-### Central de Projetos de Mecatrônica, Robótica e Elétrica
-
-<p align="center">
-  <b>Turma:</b> 104 &nbsp;&bull;&nbsp; 
-  <b>Curso:</b> Mecatrônica
-</p>
-
-</div>
-
----
-
-### 👥 Integrantes
-* **Luiz Fernando**
-* **Gabriel Bernardo**
-* **Maria Eduarda**
-* **Caio Vianna**
 
 ---
 
